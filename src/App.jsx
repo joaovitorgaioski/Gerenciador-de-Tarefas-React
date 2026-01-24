@@ -2,9 +2,10 @@ import Tasks from "./components/Tasks";
 import AddTasks from "./components/AddTask";
 import { useEffect, useState } from "react";
 import { v4 } from "uuid";
-import Title from './components/Title'
+import Title from "./components/Title";
 
 function App() {
+  const [taskToEdit, setTaskToEdit] = useState(null);
   const [tasks, setTasks] = useState(
     JSON.parse(localStorage.getItem("tasks")) || [],
   );
@@ -15,7 +16,7 @@ function App() {
   }, [tasks]);
 
   // useEffect() possuindo lista vazia só será executado uma vez, e essa única vez é quando ele acessa pela primeira vez
-  
+
   /*
   // Esse useEffect() é para chamar dados teste de uma API (opcional)
   useEffect(() => {
@@ -53,28 +54,38 @@ function App() {
   }
 
   function onAddTask(title, description) {
-    const newTask = {
-      id: v4(),
-      title: title,
-      description: description,
-      isCompleted: false,
-    };
+    if (taskToEdit) {
+      const newTask = tasks.map(task =>
+        task.id == taskToEdit.id ? { ...task, title: title, description: description } : task,
+      );
+      setTasks(newTask);
+      setTaskToEdit(null)
+    } else {
+      const newTask = {
+        id: v4(),
+        title: title,
+        description: description,
+        isCompleted: false,
+      };
+      setTasks([...tasks, newTask]);
+    }
+  }
 
-    setTasks([...tasks, newTask]);
+  function onEditTaskClick(task) {
+    setTaskToEdit(task);
   }
 
   return (
     <div className="w-screen h-screen bg-slate-500 flex justify-center p-6">
       <div className="w-[500px] space-y-4">
-        <Title>
-          Gerenciador de Tarefas
-        </Title>
+        <Title>Gerenciador de Tarefas</Title>
 
-        <AddTasks onAddTask={onAddTask} />
-        
+        <AddTasks onAddTask={onAddTask} taskToEdit={taskToEdit} />
+
         <Tasks
           tasks={tasks}
           onTaskClick={onTaskClick}
+          onEditTaskClick={onEditTaskClick}
           onDeleteTask={onDeleteTask}
         />
         {/*Passamos os argumentos que são os props. São chamados simplesmente de props*/}

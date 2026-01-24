@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Input from "./Input";
 
-function AddTask({ onAddTask }) {
+function AddTask(props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    if (props.taskToEdit){
+      setTitle(props.taskToEdit.title)
+      setDescription(props.taskToEdit.description)
+    }
+  }, [props.taskToEdit])
 
   return (
     <div className="space-y-4 bg-slate-200 rounded-md shadow flex flex-col p-4">
@@ -25,12 +32,12 @@ function AddTask({ onAddTask }) {
           if (!title.trim() || !description.trim()) {
             return alert("Preencha o título e a descrição!");
           }
-          onAddTask(title, description);
+          props.onAddTask(title, description);
           setTitle("");
           setDescription("");
         }}
       >
-        Adicionar
+        {props.taskToEdit ? 'Editar' : 'Adicionar'}
       </button>
     </div>
   );

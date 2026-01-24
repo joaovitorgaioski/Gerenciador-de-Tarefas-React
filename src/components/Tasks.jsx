@@ -1,4 +1,4 @@
-import { ChevronRightIcon, TrashIcon } from "lucide-react";
+import { ChevronRightIcon, Edit, TrashIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Button from "./Button";
 
@@ -31,6 +31,14 @@ function Tasks(props) {
             }}
           >
             <ChevronRightIcon />
+          </Button>
+
+          <Button
+            onClick={() => {
+              props.onEditTaskClick(tasks);
+            }}
+          >
+            <Edit />
           </Button>
 
           <Button
