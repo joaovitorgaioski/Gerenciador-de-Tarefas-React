@@ -15,7 +15,9 @@ function Tasks(props) {
   }
 
   return (
-    <ul className="space-y-4 bg-slate-200 p-4 rounded-md shadow">
+    <ul
+      className={`${props.tasks.length > 0 ? "space-y-4 rounded-md bg-slate-200 p-4 shadow" : ""}`}
+    >
       {props.tasks.map((tasks) => (
         <li key={tasks.id} className="flex gap-2">
           <button
