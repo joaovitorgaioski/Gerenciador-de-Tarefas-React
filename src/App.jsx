@@ -6,9 +6,23 @@ import Title from "./components/Title";
 
 function App() {
   const [taskToEdit, setTaskToEdit] = useState(null);
-  const [tasks, setTasks] = useState(
-    JSON.parse(localStorage.getItem("tasks")) || [],
-  );
+
+  const [tasks, setTasks] = useState(() => {
+    const storedTasks = localStorage.getItem("tasks");
+
+    if (storedTasks) {
+      return JSON.parse(storedTasks);
+    }
+
+    return [
+      {
+        id: v4(),
+        title: "Tarefa de Exemplo",
+        description: "Você pode editar ou excluir esta tarefa, faça o teste.",
+        isCompleted: false,
+      },
+    ];
+  });
 
   // useEffect() é usado para executar código sempre que o State for alterado: Ele recebe dois parâmetros: Função (código) e Lista (State)
   useEffect(() => {
@@ -55,11 +69,13 @@ function App() {
 
   function onAddTask(title, description) {
     if (taskToEdit) {
-      const newTask = tasks.map(task =>
-        task.id == taskToEdit.id ? { ...task, title: title, description: description } : task,
+      const newTask = tasks.map((task) =>
+        task.id == taskToEdit.id
+          ? { ...task, title: title, description: description }
+          : task,
       );
       setTasks(newTask);
-      setTaskToEdit(null)
+      setTaskToEdit(null);
     } else {
       const newTask = {
         id: v4(),
