@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import Title from '../components/Title'
 
 function TaskPage() {
-  // Começa com 'use' é um hook
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const title = searchParams.get("title");
